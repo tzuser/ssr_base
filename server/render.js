@@ -11,7 +11,7 @@ import fs from 'fs';
 import Helmet from 'react-helmet';
 import { getBundles } from 'react-loadable/webpack'
 import stats from '../build/react-loadable.json';
-import {getDataFromTree} from './fetchData';
+import {getDataFromTree} from 'fetch-initial-data';
 //html处理
 const prepHTML=(data,{html,head,style,body,script,css,state})=>{
 	data=data.replace('<html',`<html ${html}`);

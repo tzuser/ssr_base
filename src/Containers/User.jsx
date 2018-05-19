@@ -5,21 +5,20 @@ import {bindActionCreators} from 'redux';
 class User extends Component{
   constructor(props){
     super(props)
-    this.fetchData();
+    if(typeof window==="object")this.fetchData();
   }
   async fetchData(){
-    console.log('用户')
-    await this.props.getDataAct();
+    await this.props.getUserDataAct();
   }
   render(){
     let {data}=this.props;
-    return <div>首页更改 {data}</div>
+    return <div>用户 {data}</div>
   }
 }
 const mapStateToProps=(state)=>({
-  data:state.config.data
+  data:state.config.userData
 })
 const mapDispatchToProps=(dispatch)=>bindActionCreators({
-  getDataAct:Acts.getData,
+  getUserDataAct:Acts.getUserData,
 },dispatch)
 export default connect(mapStateToProps,mapDispatchToProps)(User)

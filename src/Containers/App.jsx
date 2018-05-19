@@ -24,12 +24,11 @@ class App extends Component{
 	render(){
 		return(
 			<div>
+        <Link to="/">home</Link>|
+        <Link to="/user">user</Link>
 				<Route exact path="/"  component={LoadableHome}/>
 				<Route path="/user" component={LoadableUser}/>
 				<Route path="/list" component={LoadableList}/>
-
-				<Link to="/user">user</Link>
-				<Link to="/list">list</Link>
 			</div>
 		)
 	}

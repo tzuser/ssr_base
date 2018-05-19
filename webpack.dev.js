@@ -10,6 +10,7 @@ config.plugins.push(
 let devConfig={
 	context:path.resolve(__dirname,'src'),
 	devtool: 'eval-source-map',
+	mode:'development',
 	devServer: {
 		contentBase: path.join(__dirname,'./build'),
 		inline:true,

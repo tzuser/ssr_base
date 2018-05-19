@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 let buildConfig={
-
+  mode:'production',
 }
 let newPlugins=[
     new CleanWebpackPlugin(['./build']),

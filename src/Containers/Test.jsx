@@ -5,14 +5,14 @@ import {bindActionCreators} from 'redux';
 class Test extends Component{
   constructor(props){
     super(props)
-    this.fetchData();
+    if(typeof window==="object")this.fetchData();
   }
   async fetchData(){
     await this.props.getTestDataAct();
   }
   render(){
     let {data}=this.props;
-    return <div style={{background:'red'}}>测试Test {data}</div>
+    return <div style={{background:'red'}}>子组件 {data}</div>
   }
 }
 const mapStateToProps=(state)=>({
