@@ -11,7 +11,7 @@ let devConfig={
 	context:path.resolve(__dirname,'src'),
 	devtool: 'eval-source-map',
 	devServer: {
-		contentBase: path.join(__dirname,'./assets'),
+		contentBase: path.join(__dirname,'./build'),
 		inline:true,
 		hot:true,
 		open : true,

@@ -26,8 +26,15 @@ module.exports={
 			}
 		]
 	},
-	resolve:{extensions:['.js','.jsx','.less','.scss','.css']},
+	resolve:{
+		extensions:['.js','.jsx','.less','.scss','.css'],
+		modules: ['node_modules']
+	},
 	plugins:[
+		new webpack.DefinePlugin({
+		    'process.env.NODE_ENV':JSON.stringify(process.env.NODE_ENV || 'development'),
+		    'process.env.RUN_ENV':JSON.stringify(process.env.RUN_ENV || 'dev')
+		}),
 		new HTMLWebpackPlugin({
 			title:'Webpack配置',
 			inject: true,

@@ -11,12 +11,13 @@ import fs from 'fs';
 import Helmet from 'react-helmet';
 import { getBundles } from 'react-loadable/webpack'
 import stats from '../build/react-loadable.json';
-
+import {getDataFromTree} from './fetchData';
 //html处理
-const prepHTML=(data,{html,head,style,body,script})=>{
+const prepHTML=(data,{html,head,style,body,script,css,state})=>{
 	data=data.replace('<html',`<html ${html}`);
 	data=data.replace('</head>',`${head}${style}</head>`);
-	data=data.replace('<div id="root"></div>',`<div id="root">${body}</div>`);
+	data=data.replace('<body>',`<body><script>window._INIT_STATE_ = ${JSON.stringify(state)}</script>`);
+	data=data.replace('<div id="root"></div>',`<div id="root">${body}</div><style id="jss-server-side">${css}</style>`);
 	data=data.replace('</body>',`${script}</body>`);
 	return data;
 }
@@ -24,7 +25,7 @@ const prepHTML=(data,{html,head,style,body,script})=>{
 const render=async (ctx,next)=>{
 		const filePath=path.resolve(__dirname,'../build/index.html')
 		let html=await new Promise((resolve,reject)=>{
-			fs.readFile(filePath,'utf8',(err,htmlData)=>{//读取index.html文件
+			fs.readFile(filePath,'utf8',async (err,htmlData)=>{//读取index.html文件
 				if(err){
 					console.error('读取文件错误!',err);
 					return res.status(404).end()
@@ -33,7 +34,8 @@ const render=async (ctx,next)=>{
 				const { store, history } = createServerStore(ctx.req.url);
 
 				let modules=[];
-				let routeMarkup =renderToString(
+
+				const AppRender=(
 					<Loadable.Capture report={moduleName => modules.push(moduleName)}>
 						<Provider store={store}>
 							<ConnectedRouter history={history}>
@@ -41,7 +43,10 @@ const render=async (ctx,next)=>{
 							</ConnectedRouter>
 						</Provider>
 					</Loadable.Capture>
-					)
+				)
+				await getDataFromTree(AppRender);
+				let state=store.getState();
+				let routeMarkup =renderToString(AppRender)
 
 				let bundles = getBundles(stats, modules);
 				let styles = bundles.filter(bundle => bundle.file.endsWith('.css'));
@@ -62,6 +67,7 @@ const render=async (ctx,next)=>{
 					style:styleStr,
 					body:routeMarkup,
 					script:scriptStr,
+					state
 				})
 				resolve(html)
 			})

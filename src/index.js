@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
@@ -12,10 +13,14 @@ import {ConnectedRouter,routerMiddleware} from 'react-router-redux';
 import {  Router } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
+
 const history = createHistory()
 const middleware=[thunk,routerMiddleware(history)];
+//首次数据
+let initialState=window._INIT_STATE_ || {};
 const store=createStore(
 	reducers,
+	initialState,
 	composeWithDevTools(applyMiddleware(...middleware))
 	)
 if(module.hot) {
@@ -29,10 +34,10 @@ if(module.hot) {
 			render(store)
 		});
 	}
-
+const renderDOM=process.env.NODE_ENV=='production'?ReactDOM.hydrate:ReactDOM.render;
 const render=()=>{
 	const App = require("./Containers/App.jsx").default;
-	ReactDOM.hydrate(
+	renderDOM(
 		<Provider store={store}>
 			<ConnectedRouter history={history}>
 				<App />

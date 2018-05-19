@@ -5,17 +5,20 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config ./webpack.dev.js",
-    "build": "webpack --config ./webpack.build.js -p",
-    "server": "node --harmony server/index.js"
+    "start": "cross-env RUN_ENV=dev NODE_ENV=development webpack-dev-server --config ./webpack.dev.js",
+    "build": "cross-env RUN_ENV=build NODE_ENV=production webpack --config ./webpack.build.js --optimize-minimize",
+    "analyzer-build": "cross-env RUN_ENV=build NODE_ENV=production webpack --profile --json > stats.json --config ./webpack.build.js --optimize-minimize",
+    "analyzer": "webpack-bundle-analyzer stats.json",
+    "server": "cross-env RUN_ENV=server NODE_ENV=production node --harmony server/index.js",
+    "server-dev": "cross-env RUN_ENV=server NODE_ENV=production nodemon --harmony server/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bundle-loader": "^0.5.5",
-    "react": "^16.1.1",
-    "react-dom": "^16.2.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-loadable": "^5.3.1",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
@@ -37,6 +40,7 @@
     "babel-register": "^6.26.0",
     "clean-webpack-plugin": "^0.1.17",
     "copy-webpack-plugin": "^4.2.3",
+    "cross-env": "^5.1.5",
     "html-webpack-plugin": "^2.30.1",
     "import-inspector": "^2.0.0",
     "koa": "^2.4.1",
